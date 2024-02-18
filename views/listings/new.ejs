@@ -1,0 +1,45 @@
+<%- layout("/layouts/boilerplate") %>
+<br>
+<div class="row">
+    <div class="col-8 offset-2">
+    <h3>Create new Listing</h3>
+    <form method="POST" action="/listings" novalidate class="needs-validation">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input name="listing[title]" placeholder="What's the name of your place?" type="text" class="form-control" required>
+            <div class="invalid-feedback">Please enter title</div>
+            <div class="valid-feedback"> Looks good!</div>
+        </div >
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="listing[description]" placeholder="Add a decsription" cols="50" rows="3 "  class="form-control" type="text" required></textarea>
+            <div class="invalid-feedback">Please enter description</div>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image</label>
+            <input type="text" name="listing[image.url]" placeholder="Share image URL" class="form-control" >
+        </div>
+        
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="text" name="listing[price]" placeholder="1200" class="form-control" required>
+            <div class="invalid-feedback">Please enter valid Price</div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-md-4">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" name="listing[location]" placeholder="What's the location?" class="form-control" required>
+                <div class="invalid-feedback">Please enter valid Location</div>
+            </div>
+
+            <div class="mb-3 col-md-8">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" name="listing[country]" placeholder="Which country ?" class="form-control" required>
+                <div class="invalid-feedback">Please enter valid Country</div>
+            </div>
+        </div>
+        <button class="btn btn-dark">Add</button>
+        <br><br>
+    </form>
+</div>
+</div>

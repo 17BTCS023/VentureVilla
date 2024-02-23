@@ -2,12 +2,13 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listings.js");
+const Reviews = require("./models/review.js");
 const methodOverride = require("method-override");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const { listingSchema } = require("./schema.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/venturevilla";
     
@@ -37,7 +38,18 @@ const validateListing = (req, res, next) => {
     console.log(error);
     if(error){
         let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg)
+        throw new ExpressError(400, errMsg);
+    }else{
+        next();
+    }
+}
+
+const validateReview = (req, res, next) => {
+    let {error} = reviewSchema.validate(req.body);
+    if(error){
+        console.log(error + "- some error in review");
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
     }else{
         next();
     }
@@ -64,9 +76,20 @@ app.get("/listings/:id", wrapAsync( async (req, res) => {
 
 // Create Route
 app.post("/listings", validateListing,  wrapAsync((async (req, res, next) => {
-        // let {title, description, image, price, location, country} = req.body;
-        const newLisitng = new Listing(req.body.listing);
-        await newLisitng.save();
+        console.log({...req.body.listing});
+        let object = req.body.listing;
+        let newListing = new Listing({
+            title: object.title,
+            description: object.description,
+            image: {
+                filename: "listingimage",
+                url: object.image.url
+            },
+            price: object.price,
+            location: object.location,
+            country: object.country,
+        });
+        await newListing.save();
         res.redirect("/listings"); 
     }
 )));
@@ -81,8 +104,20 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 // Update route
 app.put("/listings/:id", validateListing, wrapAsync( async (req, res) => {
     console.log({...req.body.listing});
+    let object = req.body.listing;
+    let updatedListing = new Listing({
+        title: object.title,
+        description: object.description,
+        image: {
+            filename: "listingimage",
+            url: object.image.url
+        },
+        price: object.price,
+        location: object.location,
+        country: object.country,
+    });
     let {id} = req.params;
-    await Listing.findByIdAndUpdate(id, {...req.body.listing});
+    await Listing.findByIdAndUpdate(id, {...updatedListing});
     res.redirect("/listings");
 }));
 
@@ -93,6 +128,21 @@ app.delete("/listings/:id", wrapAsync( async (req, res) =>{
     console.log(list);
     res.redirect("/listings");
 }));
+
+//Reviews 
+// POST Route 
+app.post("/listings/:id/reviews", validateReview, wrapAsync (async(req, res) => {
+    let {id} = req.params;
+    let listing = await Listing.findOneAndUpdate(id);
+    let newReview = new Reviews(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+    res.redirect(`/listings/${listing._id}`);
+}));
+
+
+
 // app.get("/testlisting", async (req, res) =>{
 //     let sampleListing = new Listing({
 //         title : "My New Villa",

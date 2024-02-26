@@ -9,7 +9,6 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
-
 const MONGO_URL = "mongodb://127.0.0.1:27017/venturevilla";
     
 main()
@@ -47,7 +46,6 @@ const validateListing = (req, res, next) => {
 const validateReview = (req, res, next) => {
     let {error} = reviewSchema.validate(req.body);
     if(error){
-        console.log(error + "- some error in review");
         let errMsg = error.details.map((el) => el.message).join(",");
         throw new ExpressError(400, errMsg);
     }else{
@@ -70,7 +68,7 @@ app.get("/listings/new", (req, res) => {
 // Show route
 app.get("/listings/:id", wrapAsync( async (req, res) => {
     let {id} = req.params;
-    let listing = await Listing.findById(id);
+    let listing = await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs", {listing});
 }));
 
@@ -103,9 +101,11 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 
 // Update route
 app.put("/listings/:id", validateListing, wrapAsync( async (req, res) => {
+    let {id} = req.params;
     console.log({...req.body.listing});
     let object = req.body.listing;
     let updatedListing = new Listing({
+        _id : id,
         title: object.title,
         description: object.description,
         image: {
@@ -116,7 +116,6 @@ app.put("/listings/:id", validateListing, wrapAsync( async (req, res) => {
         location: object.location,
         country: object.country,
     });
-    let {id} = req.params;
     await Listing.findByIdAndUpdate(id, {...updatedListing});
     res.redirect("/listings");
 }));
@@ -131,10 +130,10 @@ app.delete("/listings/:id", wrapAsync( async (req, res) =>{
 
 //Reviews 
 // POST Route 
-app.post("/listings/:id/reviews", validateReview, wrapAsync (async(req, res) => {
+app.post("/listings/:id/reviews", validateReview, wrapAsync( async (req, res) => {
     let {id} = req.params;
     let listing = await Listing.findOneAndUpdate(id);
-    let newReview = new Reviews(req.body.review);
+    let newReview = new Reviews({...req.body.review});
     listing.reviews.push(newReview);
     await newReview.save();
     await listing.save();
@@ -165,11 +164,9 @@ app.all( "*", (req, res, next) => {
 
 //Error Handling Middleware
 app.use((err, req, res, next) => {
-    let { statusCode = 400, message = "Something went wrong" } = err;
-    setTimeout(() => {
-        console.log(err.message);
-        res.render("error.ejs", { err });
-    }, 1000);
+    let { status = 400, message = "Something went wrong" } = err;
+    console.log(err.message + " " + err.status);
+    res.render("error.ejs", { err });
     
     // res.status(statusCode).send(message);   
 })

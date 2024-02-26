@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listings.js");
-const Reviews = require("./models/review.js");
+const Review = require("./models/review.js");
 const methodOverride = require("method-override");
 const path = require("path");
 const ejsMate = require("ejs-mate");
@@ -129,7 +129,8 @@ app.delete("/listings/:id", wrapAsync( async (req, res) =>{
 }));
 
 //Reviews 
-// POST Route 
+
+// Post review Route 
 app.post("/listings/:id/reviews", validateReview, wrapAsync( async (req, res) => {
     let {id} = req.params;
     let listing = await Listing.findOneAndUpdate(id);
@@ -140,7 +141,13 @@ app.post("/listings/:id/reviews", validateReview, wrapAsync( async (req, res) =>
     res.redirect(`/listings/${listing._id}`);
 }));
 
-
+// Delete Review Route
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync( async (req, res) => {
+    let {id, reviewId} = req.params;
+    await Listing.findByIdAndUpdate(id, {$pull: {reviews : reviewId} });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/listings/${id}`);
+}));
 
 // app.get("/testlisting", async (req, res) =>{
 //     let sampleListing = new Listing({
@@ -170,6 +177,7 @@ app.use((err, req, res, next) => {
     
     // res.status(statusCode).send(message);   
 })
+
 
 app.listen(3000, () =>{
     console.log("Server is listening on port 3000");

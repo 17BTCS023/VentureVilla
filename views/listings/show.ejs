@@ -3,12 +3,14 @@
 <div class="row">
     <div class="row offset-1 ">
         <div class="row">
-            <div class="col-10"> <h3><b><%= listing.title %></b></h3></div>
-            <div class="col-2 show-actions">
+            <div class="row col-10">
+                <div class="col-10"> <h3><b><%= listing.title %></b></h3></div>
+                <div class="col-2 show-actions">
                 <div><a href="/listings/<%= listing._id %>/edit" class="btn btn-success"><i class="fas fa-edit"></i></a></div>
                 <form method="POST" action="/listings/<%= listing.id %>?_method=DELETE" class="offset-1">
                     <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                 </form>
+            </div>
             </div>
             <div class="row col-10">
                 <div class="row">
@@ -24,7 +26,7 @@
             </div>
             <br>
             <div class="row col-10">
-                <div class="border-top border-secondary mt-3">
+                <div class="border-top border-bottom border-secondary mt-4">
                     <h5 class="mb-3 mt-3"><b>Leave a Review</b></h5>
                     <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
                         <div class="mb-1">
@@ -36,27 +38,36 @@
                             <textarea name="review[comment]" id="comment" cols="30" rows="2" class="form-control" required></textarea>
                             <div class="invalid-feedback">Please add text</div>
                         </div>
-                        <button class="btn btn-dark">Add</button>
+                        <button class="btn btn-dark mb-3 mt-3" type="submit">Add</button>
                     </form>
                 </div>
             </div>
-        </div>
-        <div class="row mb-3 mt-3">
-            <h4>All Reviews</h4>
-            <div class="row">
-                <% for(review of listing.reviews) { %>
-                    <div class="review-card col-5 mb-3 ">
-                        <div class="card-body">
-                            <h5 class="card-title">Jane Doe</h5>
-                            <p class="card-text"><%= review.comment %></p>
-                            <p class="card-text"><%= review.rating %> stars</p>
-                            <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id%>?_method=DELETE">
-                                <button class="btn btn-dark">Delete</button>
-                            </form>
-                        </div>
+            <% if(listing.reviews.length > 0) {  %>
+                <div class="row mb-3 mt-3">
+                    <h4>All Reviews</h4>
+                    <div class="row">
+                        <% for(review of listing.reviews) { %>
+                            <div class="review-card col-5 mb-3 ">
+                                <div class="card-body">
+                                    <h5 class="card-title">Jane Doe</h5>
+                                    <p class="card-text"><%= review.comment %></p>
+                                    <p class="card-text"><%= review.rating %> stars</p>
+                                    <form class="mb-3 mt-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id%>?_method=DELETE">
+                                        <button class="btn btn-dark">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        <% } %>
                     </div>
-                <% } %>
-            </div>
+                </div>
+            <% }else { %>
+                <div class="row">
+                    <div class="center">
+                        <h6><p class="card-title"><i>Be the first one to leave a review . . . </i></p></h6>
+                        <img src="https://b.zmtcdn.com/data/o2_assets/a7c35e5e665dda9d67a279f4f814947f1568208663.png" alt="I don't own the image" height="200rem" width="200rem">
+                    </div>
+                </div>
+            <% } %>
         </div>
     </div>
 </div>

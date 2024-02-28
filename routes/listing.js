@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 const wrapAsync = require("../utils/wrapAsync.js");
 const { listingSchema } = require("../schema.js");
 const ExpressError = require("../utils/ExpressError.js");
@@ -78,6 +78,7 @@ router.put("/:id", validateListing, wrapAsync( async (req, res) => {
         price: object.price,
         location: object.location,
         country: object.country,
+        reviews: object.reviews
     });
     await Listing.findByIdAndUpdate(id, {...updatedListing});
     res.redirect("/listings");

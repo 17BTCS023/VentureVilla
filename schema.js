@@ -12,6 +12,10 @@ module.exports.listingSchema = joi.object( {
             }),
             location: joi.string().required(),
             country: joi.string().required(),
+            reviews: joi.array().items({
+                rating: joi.number().required(),
+                comment: joi.string().required(),
+            }).allow(null),
         }
     ).required()
     }

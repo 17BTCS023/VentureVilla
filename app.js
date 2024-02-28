@@ -6,10 +6,10 @@ const path = require("path");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const MONGO_URL = "mongodb://127.0.0.1:27017/venturevilla";
-
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
 const session = require("express-session");
+const flash = require("connect-flash");
     
 main()
 .then(() => console.log("Connected to DB"))
@@ -38,6 +38,12 @@ const sesisonOptions = {
 }
 
 app.use(session(sesisonOptions));
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    next();
+})
 
 app.get("/", (req, res) =>{
     res.send("I am root and groot of this app, ha ha ha ");

@@ -51,6 +51,7 @@ router.post("/", validateListing,  wrapAsync((async (req, res, next) => {
             country: object.country,
         });
         await newListing.save();
+        req.flash("success", "New Listing was created!");
         res.redirect("/listings"); 
     }
 )));

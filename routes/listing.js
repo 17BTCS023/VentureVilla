@@ -4,6 +4,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const { listingSchema } = require("../schema.js");
 const ExpressError = require("../utils/ExpressError.js");
 const Listing = require("../models/listings.js");
+const { isLoggedin } = require("../middleware.js");
 
 const validateListing = (req, res, next) => {
     let {error} = listingSchema.validate(req.body);
@@ -24,7 +25,8 @@ router.get("/", wrapAsync( async (req, res) => {
 }));
 
 // New route
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedin, (req, res) => {
+    console.log(req.user);
     res.render("listings/new.ejs");
 });
 
@@ -40,7 +42,7 @@ router.get("/:id", wrapAsync( async (req, res) => {
 }));
 
 // Create Route
-router.post("/", validateListing,  wrapAsync((async (req, res, next) => {
+router.post("/", isLoggedin , validateListing,  wrapAsync((async (req, res, next) => {
         console.log({...req.body.listing});
         let object = req.body.listing;
         let newListing = new Listing({
@@ -61,7 +63,7 @@ router.post("/", validateListing,  wrapAsync((async (req, res, next) => {
 )));
 
 // Edit route
-router.get("/:id/edit", wrapAsync(async (req, res) => { 
+router.get("/:id/edit", isLoggedin, wrapAsync(async (req, res) => { 
     let {id} = req.params;
     const listing = await Listing.findById(id);
     if(!listing){
@@ -72,7 +74,7 @@ router.get("/:id/edit", wrapAsync(async (req, res) => {
 }));
 
 // Update route
-router.put("/:id", validateListing, wrapAsync( async (req, res) => {
+router.put("/:id", isLoggedin, validateListing, wrapAsync( async (req, res) => {
     let {id} = req.params;
     console.log({...req.body.listing});
     let object = req.body.listing;
@@ -99,7 +101,7 @@ router.put("/:id", validateListing, wrapAsync( async (req, res) => {
 }));
 
 // Destroy route
-router.delete("/:id", wrapAsync( async (req, res) =>{
+router.delete("/:id", isLoggedin, wrapAsync( async (req, res) =>{
     let {id} = req.params;
     let listing = await Listing.findByIdAndDelete(id);
     console.log(listing);

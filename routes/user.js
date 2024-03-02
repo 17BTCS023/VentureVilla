@@ -15,8 +15,15 @@ router.post("/signup", wrapAsync(
             const newUser = new User({email, username});
             const registeredUser = await User.register(newUser, password);
             console.log(registeredUser);
-            req.flash("success", "Welcome to VentureVilla!");
-            res.redirect("/listings");
+            req.login(registeredUser, 
+                (err) => {
+                    if(err) {
+                        return next(err);
+                    }else{
+                        req.flash("success", "Welcome to VentureVilla!");
+                        res.redirect("/listings");
+                    }
+                });
         }
         catch (error) {
             req.flash("error", "user already signed up");

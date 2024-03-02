@@ -5,11 +5,13 @@
         <div class="row">
             <div class="row col-10">
                 <div class="col-10"> <h3><b><%= listing.title %></b></h3></div>
-                <div class="col-2 show-actions">
-                <div><a href="/listings/<%= listing._id %>/edit" class="btn btn-success"><i class="fas fa-edit"></i></a></div>
-                <form method="POST" action="/listings/<%= listing.id %>?_method=DELETE" class="offset-1">
-                    <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                </form>
+                <% if(currUser && currUser._id.equals(listing.owner._id)) {%>
+                    <div class="col-2 show-actions">
+                        <div><a href="/listings/<%= listing._id %>/edit" class="btn btn-success"><i class="fas fa-edit"></i></a></div>
+                        <form method="POST" action="/listings/<%= listing.id %>?_method=DELETE" class="offset-1">
+                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>
+                <% } %>
             </div>
             </div>
             <div class="row col-10">

@@ -33,11 +33,12 @@ router.get("/new", isLoggedin, (req, res) => {
 // Show route
 router.get("/:id", wrapAsync( async (req, res) => {
     let {id} = req.params;
-    let listing = await Listing.findById(id).populate("reviews");
+    let listing = await Listing.findById(id).populate("reviews").populate("owner");
     if(!listing){
         req.flash("error", "Listing does not exist");
         res.redirect("/listings"); 
     }
+    console.log(listing);
     res.render("listings/show.ejs", {listing});
 }));
 
@@ -55,6 +56,7 @@ router.post("/", isLoggedin , validateListing,  wrapAsync((async (req, res, next
             price: object.price,
             location: object.location,
             country: object.country,
+            owner: req.user._id,
         });
         await newListing.save();
         req.flash("success", "New Listing was created!");
@@ -89,7 +91,8 @@ router.put("/:id", isLoggedin, validateListing, wrapAsync( async (req, res) => {
         price: object.price,
         location: object.location,
         country: object.country,
-        reviews: object.reviews
+        reviews: object.reviews,
+        owner: object.owner,
     });
     if(!object){
         req.flash("error", "Listing does not exist");

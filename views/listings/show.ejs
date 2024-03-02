@@ -19,6 +19,7 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <p class="card-text mt-3"><i class="fa-regular fa-user"></i> Owned by : &nbsp; <%= listing.owner.username %></p>
                     <p class="card-text mt-3"><i class="fa-regular fa-file-lines"></i> &nbsp; <%= listing.description %></p>
                     <p class="card-text"> &#8377; &nbsp; <%= listing.price.toLocaleString("en-In")%> / Night </p>
                     <p class="card-text"> <i class="fas fa-map-marker-alt"></i> &nbsp; <%= listing.location%>, <%= listing.country%> </p>

@@ -21,7 +21,7 @@ router.get("/new", isLoggedin, (req, res) => {
 // Show route
 router.get("/:id", wrapAsync( async (req, res) => {
     let {id} = req.params;
-    let listing = await Listing.findById(id).populate("reviews").populate("owner");
+    let listing = await Listing.findById(id).populate({ path : "reviews", populate : {path : "author"}}).populate("owner");
     if(!listing){
         req.flash("error", "Listing does not exist");
         res.redirect("/listings"); 
@@ -67,25 +67,14 @@ router.get("/:id/edit", isLoggedin, isOwner,  wrapAsync(async (req, res) => {
 router.put("/:id", isLoggedin, isOwner, validateListing, wrapAsync( async (req, res) => {
     let {id} = req.params;
     console.log({...req.body.listing});
-    let object = req.body.listing;
-    let updatedListing = new Listing({
-        _id : id,
-        title: object.title,
-        description: object.description,
-        image: {
-            filename: "listingimage",
-            url: object.image.url
-        },
-        price: object.price,
-        location: object.location,
-        country: object.country,
-        reviews: object.reviews,
-        owner: object.owner,
-    });
-    if(!object){
+    if(!req.body.listing){
         req.flash("error", "Listing does not exist");
     }else{
-        await Listing.findByIdAndUpdate(id, {...updatedListing});
+        await Listing.findByIdAndUpdate(id, {...req.body.listing, 
+            image: {
+                filename: "listingimage",
+                url: req.body.listing.image.url
+            }});
         req.flash("success", "Listing was updated successfully!");
     }
     res.redirect(`/listings/${id}`);

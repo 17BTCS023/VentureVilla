@@ -16,6 +16,10 @@
                 <div class="invalid-feedback">Please enter description</div>
             </div>
             <div class="mb-3">
+                <label for="lastimg">Original Listing Image</label><br>
+                <img name="lastimg" src="<%= originalImageUrl %>" alt="">
+            </div>
+            <div class="mb-3">
                 <label for="url" class="form-label">Upload new Image</label>
                 <input type="file" name="listing[image][url]" placeholder="<%= listing.image.url %>" value="<%= listing.image.url %>" class="form-control">
             </div>

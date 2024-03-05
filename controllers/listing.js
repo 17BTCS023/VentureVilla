@@ -58,11 +58,15 @@ module.exports.updateListing =  async (req, res) => {
     if(!req.body.listing){
         req.flash("error", "Listing does not exist");
     }else{
-        await Listing.findByIdAndUpdate(id, {...req.body.listing, 
-            image: {
-                filename: "listingimage",
-                url: req.body.listing.image.url
-            }});
+        if( typeof req.file !== "undefined"){
+            await Listing.findByIdAndUpdate(id, {...req.body.listing, 
+                image: {
+                    filename: req.file.filename,
+                    url: req.file.path,
+                }});
+        }else{
+            await Listing.findByIdAndUpdate(id, {...req.body.listing, });
+        }
         req.flash("success", "Listing was updated successfully!");
     }
     res.redirect(`/listings/${id}`);

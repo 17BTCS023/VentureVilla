@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 })
 
 app.get("/", (req, res) =>{
-    res.send("I am root and groot of this app, ha ha ha ");
+    res.send("Hey, you are not supposed to be here! GO back!");
 });
 
 app.use("/listings", listingsRouter);

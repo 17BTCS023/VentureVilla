@@ -29,8 +29,8 @@ module.exports.createListing = async (req, res, next) => {
         title: object.title,
         description: object.description,
         image: {
-            filename: "listingimage",
-            url: object.image.url
+            filename: req.file.filename,
+            url: req.file.path,
         },
         price: object.price,
         location: object.location,

@@ -12,7 +12,7 @@ const ExpressError = require("./utils/ExpressError.js");
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const session = require("express-session");
-const MongoSote = require("connect-mongo");
+const MongoSotre = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -37,16 +37,15 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 
-const store = MongoSote.create({
+const store = MongoSotre.create({
     mongoUrl: dbUrl,
     crypto:{
         secret : process.env.SECRET,
     },
     touchAfter: 24*3600,
-    ttl : 7*24*60*60,
-}); 
+});
 
-store.on("error", ()=>{
+store.on("error", (err)=>{
     console.log("ERROR in MONGO SESSION STORE", err);
 })
 
@@ -61,6 +60,7 @@ const sesisonOptions = {
         httpOnly: true
     }
 }
+ 
 app.use(session(sesisonOptions));
 app.use(flash());
 

@@ -12,7 +12,7 @@ const ExpressError = require("./utils/ExpressError.js");
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const session = require("express-session");
-const MongoSotre = require("connect-mongo");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -37,7 +37,7 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 
-const store = MongoSotre.create({
+const store = MongoStore.create({
     mongoUrl: dbUrl,
     crypto:{
         secret : process.env.SECRET,

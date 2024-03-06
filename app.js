@@ -78,9 +78,9 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get("/", (req, res) =>{
-    res.send("Hey, you are not supposed to be here! GO back!");
-});
+// app.get("/", (req, res) =>{
+//     res.send("Hey, you are not supposed to be here! GO back!");
+// });
 
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);

@@ -9,22 +9,24 @@ const methodOverride = require("method-override");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
-const MONGO_URL = "mongodb://127.0.0.1:27017/venturevilla";
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const session = require("express-session");
+const MongoSote = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const userRouter = require("./routes/user.js");
+
+const dbUrl = process.env.ATLASDB_URL;
     
 main()
 .then(() => console.log("Connected to DB"))
 .catch((err) => console.log(err));
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 };
 
 app.set("view engine", "ejs");
@@ -34,8 +36,23 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+const store = MongoSote.create({
+    mongoUrl: dbUrl,
+    crypto:{
+        secret : process.env.SECRET,
+    },
+    touchAfter: 24*3600,
+    ttl : 7*24*60*60,
+}); 
+
+store.on("error", ()=>{
+    console.log("ERROR in MONGO SESSION STORE", err);
+})
+
 const sesisonOptions = {
-    secret : "mySuperSceretCode",
+    store: store,
+    secret : process.env.SECRET,
     resave: false,
     saveUninitialized : true,
     cookie: {
@@ -44,7 +61,6 @@ const sesisonOptions = {
         httpOnly: true
     }
 }
-
 app.use(session(sesisonOptions));
 app.use(flash());
 

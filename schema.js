@@ -16,6 +16,7 @@ module.exports.listingSchema = joi.object( {
                 rating: joi.number().required(),
                 comment: joi.string().required(),
             }).allow(null),
+            category: joi.string().valid('','Trending','Rooms','Iconic Cities','Mountain','Camping','Castles','Farms','Arctic','Amazing pools','Domes','Lakes','Forrest'),
         }
     ).required()
     }

@@ -36,6 +36,7 @@ module.exports.createListing = async (req, res, next) => {
         location: object.location,
         country: object.country,
         owner: req.user._id,
+        category: object.category,
     });
     await newListing.save();
     req.flash("success", "New Listing was created!");

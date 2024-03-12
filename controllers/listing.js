@@ -22,6 +22,12 @@ module.exports.showListing = async (req, res) => {
     res.render("listings/show.ejs", {listing});
 }
 
+module.exports.showFilteredListing = async (req, res) => {
+    let {category} = req.params;
+    let allListings = await Listing.find({category : category});
+    res.render("listings/index.ejs", {allListings});
+}
+
 module.exports.createListing = async (req, res, next) => {
     console.log({...req.body.listing});
     let object = req.body.listing;

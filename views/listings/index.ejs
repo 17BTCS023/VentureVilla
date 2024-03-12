@@ -23,6 +23,10 @@
         font-size: 0.8rem ;
     }
 
+    #filters a {
+        text-decoration: none;
+    }
+
     .tax-info{
         display: none;
     }
@@ -39,54 +43,84 @@
 </style>
 
 <div id="filters">
-    <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-mountain-city"></i></div>
-        <p>Iconic Cities</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-mountain"></i></div>
-        <p>Mountain</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-cow"></i></div>
-        <p>Farms</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-snowflake"></i></div>
-        <p>Arctic</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Amazing pools</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-igloo"></i></div>
-        <p>Domes</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-ship"></i></div>
-        <p>Lakes</p>
-    </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-tree"></i></div>
-        <p>Forrest</p>
-    </div>
+    <a href="/listings/">
+        <div class="filter">
+            <div><i class="fa-solid fa-heart"></i></div>
+            <p>All</p>
+        </div>
+    </a>
+    <a href="/listings/category/Trending">
+        <div class="filter">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p>Trending</p>
+        </div>
+    </a>
+    <a href="/listings/category/Rooms">
+        <div class="filter">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </div>
+    </a>
+    <a href="/listings/category/Iconic-cities">
+        <div class="filter">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic Cities</p>
+        </div>
+    </a>
+    <a href="/listings/category/Mountain">
+        <div class="filter" >
+            <div><i class="fa-solid fa-mountain"></i></div>
+            <p>Mountain</p>
+        </div>
+    </a>
+    <a href="/listings/category/Camping">
+        <div class="filter">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Camping</p>
+        </div>
+    </a>
+    <a href="/listings/category/Castles">
+        <div class="filter">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castles</p>
+        </div>
+    </a>
+    <a href="/listings/category/Farms">
+        <div class="filter">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+        </div>
+    </a>
+    <a href="/listings/category/Arctic">
+        <div class="filter">
+            <div><i class="fa-solid fa-snowflake"></i></div>
+            <p>Arctic</p>
+        </div>
+    </a>
+    <a href="/listings/category/Aamazing-pools">
+        <div class="filter">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing pools</p>
+        </div>
+    </a>
+    <a href="/listings/category/Domes">
+        <div class="filter">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Domes</p>
+        </div>
+    </a>
+    <a href="/listings/category/Lakes">
+        <div class="filter" >
+            <div><i class="fa-solid fa-ship"></i></div>
+            <p>Lakes</p>
+        </div>
+    </a>
+    <a href="/listings/category/Forrest">
+        <div class="filter" >
+            <div><i class="fa-solid fa-tree"></i></div>
+            <p>Forrest</p>
+        </div>
+    </a>
     <div class="tax-toggle">
         <div class="form-check-reverse form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
@@ -97,12 +131,12 @@
 
     <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-3">
         <% for( let listing of allListings) { %>
-            <a href="/listings/<%= listing._id%>" class="listing-link"> 
+            <a href="/listings/<%= listing._id%>" class="listing-link <%=listing.category %>"> 
             <div class="card col " >
                 <img src="<%= listing.image.url %>" class="card-img-top" alt="..." style="height: 20rem;">
                 <div class="card-img-overlay"></div>
                 <div class="card-body">
-                    <p class="card-text"> <b> <%= listing.title %> </b></p>
+                    <p class="card-text"> <b> <%= listing.title %> <i class="fas fa-dot-circle"></i> <span class="<%= listing.category %>"> <%= listing.category %></b></p>
                     <!-- <p class="card-text"><%= listing.description %></p> -->
                     <p class="card-text"> &#8377;<%= listing.price.toLocaleString("en-In")%> <i class ="tax-info"> &nbsp; + 18% GST</i> / Night </p>
                     <p class="card-text"><%= listing.location%> , <%= listing.country%></p>

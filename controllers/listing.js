@@ -1,3 +1,4 @@
+const { model } = require("mongoose");
 const Listing = require("../models/listings.js")
 
 module.exports.index = async (req, res) => {
@@ -25,6 +26,13 @@ module.exports.showListing = async (req, res) => {
 module.exports.showFilteredListing = async (req, res) => {
     let {category} = req.params;
     let allListings = await Listing.find({category : category});
+    res.render("listings/index.ejs", {allListings});
+}
+
+module.exports.searchedListing = async (req, res) => {
+    let {location} = req.query;
+    let allListings = await Listing.find({location : location});
+    // res.send(allListings);
     res.render("listings/index.ejs", {allListings});
 }
 

@@ -21,7 +21,7 @@ router.route("/:id")
 .put(isLoggedin, isOwner, upload.single("listing[image][url]"), validateListing, wrapAsync(ListingController.updateListing)) // Update route
 .delete(isLoggedin, isOwner, wrapAsync(ListingController.destroy)); // Destroy route
 
-router.get("/category/:category",ListingController.showFilteredListing);
+router.get("/category/:category", wrapAsync(ListingController.showFilteredListing));
 
 // Edit route
 router.get("/:id/edit", isLoggedin, isOwner,  wrapAsync(ListingController.renderEditForm));

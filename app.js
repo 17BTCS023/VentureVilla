@@ -18,6 +18,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const userRouter = require("./routes/user.js");
+const locationRouter = require("./routes/search.js");
 
 const dbUrl = "mongodb://127.0.0.1:27017/venturevilla"
 // const dbUrl = process.env.ATLASDB_URL;
@@ -83,10 +84,11 @@ app.use((req, res, next) => {
 //     res.send("Hey, you are not supposed to be here! GO back!");
 // });
 
+
+app.use("/location", locationRouter);
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
-
 // unkown path 
 app.all( "*", (req, res, next) => {
     next(new ExpressError(404, "Page not found!"));

@@ -9,8 +9,9 @@
             <a class="nav-link" href="/listings">Explore</a>
         </div>
         <div class="navbar-nav ms-auto">
-            <form class="d-flex">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" method="GET" action="/location/:location">
+                <label for="location" class="form-label"></label>
+                <input class="form-control mr-sm-2" name="location" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>

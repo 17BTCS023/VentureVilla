@@ -20,8 +20,8 @@ const User = require("./models/user.js");
 const userRouter = require("./routes/user.js");
 const locationRouter = require("./routes/search.js");
 
-const dbUrl = "mongodb://127.0.0.1:27017/venturevilla"
-// const dbUrl = process.env.ATLASDB_URL;
+// const dbUrl = "mongodb://127.0.0.1:27017/venturevilla"
+const dbUrl = process.env.ATLASDB_URL;
     
 main()
 .then(() => console.log("Connected to DB"))
